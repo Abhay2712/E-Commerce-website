@@ -1,13 +1,24 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React,{useState,useEffect} from 'react'
 import { useLocation } from "react-router-dom"
+import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup,Card,Button } from 'react-bootstrap';
 import Rating from '../components/Rating';
-import products from '../products';
+import axios from 'axios';
+// import products from '../products';
 
-const ProductScreen = ({ useMatch }) => {
-    let location = useLocation().pathname;
-    const product = products.find((p) => ('/product/' + p._id) === location);
+const ProductScreen = () => {
+    const [product,setProduct] = useState({});
+    let a = useLocation().pathname.split('/')[2];
+    useEffect(()=>{
+        
+        const fetchProduct = async () => {
+          const {data} = await axios.get('/api/products/'+a);
+          setProduct(data);
+        }
+        fetchProduct();
+      },[a])
+
+    // const product = products.find((p) => ('/product/' + p._id) === location);
     // return <div>{product._id}</div>
     return (
         <>
