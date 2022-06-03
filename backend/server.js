@@ -1,25 +1,21 @@
 const express=require('express');
-const products=require('./data/products');
 const dotenv=require('dotenv');
 const connectDB = require('./config/db');
 dotenv.config();
-const app=express();
 
+const {notFound,errorHandler}=require('./middleware/errorMiddleware');
+const app=express();
+const productRoutes=require('./routes/productRoutes');
 connectDB();
 
 app.get('/',(req,res)=>{
     res.send('Backend API is running...');
 });
 
-app.get('/api/products',(req,res)=>{
-    res.json(products);
-});
+app.use('/api/products',productRoutes);
 
-app.get('/api/products/:id',(req,res)=>{
-    const product=products.find(p=>p._id===req.params.id);
-    res.json(product);
-    
-});
+app.use(errorHandler);
+app.use(notFound);
 
 const port=process.env.PORT || 5000;
 app.listen(port,()=>{
