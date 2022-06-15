@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-// const asyncHandler=require('express-async-handler');
-const { authUser } = require('../controllers/userController');
+const { authUser,getUserProfile,registerUser } = require('../controllers/userController');
+const {protect}=require('../middleware/authMiddleware');
 
 router.post('/login', authUser);
+router.route('/profile').get(protect,getUserProfile);
+router.route('/').post(registerUser);
+
 module.exports = router;
